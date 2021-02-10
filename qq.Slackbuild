@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Slackware build script for qq.
+
+# Copyright 2021 MDrights <psychi2009@gmail.com> 
+# All rights reserved.
+#
+
+PRGNAM=qq
+VERSION=${VERSION:-2.0.0_b2_1084}
+DISTVERSION="2.0.0-b2-1084"
+BUILD=${BUILD:-1}
+TAG=${TAG:-_MD}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH="x86" ;;
+    arm*) ARCH=arm ;;
+	x86_64) ARCH="x86_64" ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+DOCFILES=""
+
+set -e
+
+rm -rf $PKG
+rm -rf $TMP/$PRGNAM-$VERSION
+mkdir -p $TMP $PKG $OUTPUT $TMP/$PRGNAM-$VERSION
+cd $TMP/$PRGNAM-$VERSION
+#tar xvf $CWD/v$VERSION.tar.gz
+#unzip $CWD/$PRGNAM-$ARCH.zip -d $TMP/$PRGNAM-$ARCH
+rpm2cpio $CWD/linuxqq_${DISTVERSION}_$ARCH.rpm | cpio -idmv
+
+# Copy the unpacked things to Temp dir.
+mkdir -p $PKG/usr/local/bin $PKG/usr/local/lib $PKG/usr/local/share $PKG/usr/share/applications
+cp -a $TMP/$PRGNAM-$VERSION/usr/local/bin/qq $PKG/usr/local/bin/
+cp -a $TMP/$PRGNAM-$VERSION/usr/local/lib/tencent-qq/ $PKG/usr/local/lib/
+cp -a $TMP/$PRGNAM-$VERSION/usr/local/share/tencent-qq/ $PKG/usr/local/share/
+cp -a $TMP/$PRGNAM-$VERSION/usr/share/applications/qq.desktop $PKG/usr/share/applications/
+
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
