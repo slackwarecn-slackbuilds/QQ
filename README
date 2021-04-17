@@ -1,0 +1,4 @@
+This script is used to install the official binary package of Tencent QQ, 
+the famous malware (and instant messaging software in Chinese). 
+
+There is firejail's qq.profile for you to use it safely (thus QQ cannot spy your filesystem). 
